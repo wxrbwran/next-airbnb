@@ -102,28 +102,64 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
               <>
                 <MenuItem
                   label="My trips"
-                  onClick={() => router.push("/trips")}
+                  onClick={() => {
+                    router.push("/trips");
+                    toggleOpen();
+                  }}
                 />
                 <MenuItem
                   label="My favorites"
-                  onClick={() => router.push("/favorites")}
+                  onClick={() => {
+                    toggleOpen();
+                    router.push("/favorites");
+                  }}
                 />
                 <MenuItem
                   label="My reservations"
-                  onClick={() => router.push("/reservations")}
+                  onClick={() => {
+                    toggleOpen();
+                    router.push("/reservations");
+                  }}
                 />
                 <MenuItem
                   label="My properties"
-                  onClick={() => router.push("/properties")}
+                  onClick={() => {
+                    toggleOpen();
+                    router.push("/properties");
+                  }}
                 />
-                <MenuItem label="Airbnb your home" onClick={rentModal.onOpen} />
+                <MenuItem
+                  label="Airbnb your home"
+                  onClick={() => {
+                    toggleOpen();
+                    rentModal.onOpen();
+                  }}
+                />
                 <hr />
-                <MenuItem label="Logout" onClick={() => signOut()} />
+                <MenuItem
+                  label="Logout"
+                  onClick={() => {
+                    signOut();
+                    toggleOpen();
+                  }}
+                />
               </>
             ) : (
               <>
-                <MenuItem label="Login" onClick={loginModal.onOpen} />
-                <MenuItem label="Sign up" onClick={registerModal.onOpen} />
+                <MenuItem
+                  label="Login"
+                  onClick={() => {
+                    signOut();
+                    loginModal.onOpen();
+                  }}
+                />
+                <MenuItem
+                  label="Sign up"
+                  onClick={() => {
+                    signOut();
+                    registerModal.onOpen();
+                  }}
+                />
               </>
             )}
           </div>
