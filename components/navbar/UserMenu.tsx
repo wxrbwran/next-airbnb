@@ -149,14 +149,14 @@ const UserMenu: React.FC<UserMenuProps> = ({ currentUser }) => {
                 <MenuItem
                   label="Login"
                   onClick={() => {
-                    signOut();
+                    toggleOpen();
                     loginModal.onOpen();
                   }}
                 />
                 <MenuItem
                   label="Sign up"
                   onClick={() => {
-                    signOut();
+                    toggleOpen();
                     registerModal.onOpen();
                   }}
                 />

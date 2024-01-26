@@ -1,29 +1,79 @@
 import bcrypt from "bcrypt";
 import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import GithubProvider from "next-auth/providers/github";
-import GoogleProvider from "next-auth/providers/google";
+// import GithubProvider from "next-auth/providers/github";
+// import GoogleProvider from "next-auth/providers/google";
 import { PrismaAdapter } from "@next-auth/prisma-adapter";
 
 import prisma from "@/libs/prismadb";
 
 export const authOptions: AuthOptions = {
+  callbacks: {
+    async jwt({ token, user, account, profile, trigger }) {
+      console.log("callback jwt token", token);
+      console.log("callback jwt user", user);
+      console.log("callback jwt account", account);
+      console.log("callback jwt profile", profile);
+      console.log("callback jwt trigger", trigger);
+
+      if (user) {
+        token.id = user.id;
+      }
+      return token;
+    },
+    session: async ({ session, token }) => {
+      console.log("callback session session", session);
+      console.log("callback session token", token);
+      return session;
+      //   const res = await prisma.user.upsert({
+      //     where: {
+      //       sub: token.sub,
+      //     },
+      //     update: {
+      //       // 使用token中的数据
+      //       username: token.name,
+      //       avatar: token.picture,
+      //       email: token.email,
+      //     },
+      //     create: {
+      //       // 使用token中的数据
+      //       sub: token.sub,
+      //       username: token.name,
+      //       avatar: token.picture,
+      //       email: token.email,
+      //       platform: "github",
+      //     },
+      //   });
+      //   if (res) {
+      //     session.user = {
+      //       sub: res.sub,
+      //       platform: res.platform,
+      //       username: res.username,
+      //       avatar: res.avatar,
+      //       email: res.email,
+      //     };
+      //   }
+      //   return session;
+    },
+  },
+
   adapter: PrismaAdapter(prisma),
   providers: [
-    GithubProvider({
-      clientId: process.env.GITHUB_ID as string,
-      clientSecret: process.env.GITHUB_SECRET as string,
-    }),
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID as string,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
-    }),
+    // GithubProvider({
+    //   clientId: process.env.GITHUB_ID as string,
+    //   clientSecret: process.env.GITHUB_SECRET as string,
+    // }),
+    // GoogleProvider({
+    //   clientId: process.env.GOOGLE_CLIENT_ID as string,
+    //   clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    // }),
     CredentialsProvider({
       name: "credentials",
       credentials: {
         email: { label: "email", type: "text" },
         password: { label: "password", type: "password" },
       },
+
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
           throw new Error("Invalid credentials");
